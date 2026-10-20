@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지권의 층상 구조 탐구</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: #f3f4f6;
+        }
+        .tab-btn.active {
+            background-color: #4f46e5;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+        .layer-card.active-blue {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .layer-card.active-green {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+        }
+        .layer-card.active-yellow {
+            border-color: #eab308;
+            background-color: #fefce8;
+        }
+        .layer-card.active-red {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        .custom-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+    <!-- Header & Navigation Bar -->
+    <header class="bg-white/90 backdrop-blur sticky top-0 z-50 border-b border-slate-200 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                    <i class="fa-solid fa-earth-asia"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">지권의 층상 구조 탐구</h1>
+                    <p class="text-xs text-slate-500">중학교 과학 1 - 지권의 구성 요소 및 특징</p>
+                </div>
+            </div>
+
+            <!-- Chapter Switch Buttons -->
+            <nav class="flex space-x-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+                <button id="btn-chap1" onclick="switchChapter(1)" class="tab-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-layer-group"></i> <span>1. 층상구조</span>
+                </button>
+                <button id="btn-chap2" onclick="switchChapter(2)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-cubes"></i> <span>2. 모형 만들기</span>
+                </button>
+                <button id="btn-chap3" onclick="switchChapter(3)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-pen-to-square"></i> <span>3. 층상구조 퀴즈</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6">
+
+        <!-- CHAPTER 1: 층상구조 -->
+        <section id="chapter-1" class="chapter-content space-y-6">
+            <!-- Header Banner -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">🌏</span>
+                    <h2 class="text-2xl font-black text-slate-900">지권의 층상 구조 비교</h2>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    지구 내부 시스템은 <strong class="text-indigo-600">지각 → 맨틀 → 외핵 → 내핵</strong>의 4개 층으로 이루어져 있어요.<br>
+                    각 카드를 클릭하면 자세한 성질과 특징 설명을 확인할 수 있습니다!
+                </p>
+                <div class="mt-3 inline-block px-3 py-1 bg-indigo-50 border border-indigo-100 rounded-lg text-xs font-semibold text-indigo-700">
+                    성취기준 [9과09-01] 지구계의 구성 요소를 알고, 지권의 층상 구조와 특징을 조사·발표할 수 있다.
+                </div>
+            </div>
+
+            <!-- Top 4 Layer Selector Cards -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- 지각 Card -->
+                <div id="card-crust" onclick="selectLayer('crust')" class="layer-card active-blue cursor-pointer bg-white p-4 rounded-2xl border-2 border-blue-500 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                        <h3 class="font-black text-lg text-slate-800">지각</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">깊이 범위</p>
+                    <p class="text-xs font-bold text-slate-700 mb-3">0 ~ 약 35 km<br><span class="text-[11px] font-normal text-slate-400">(해양 ~5 km)</span></p>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-100 text-blue-700 rounded-md text-xs font-bold">
+                        🪨 고체
+                    </span>
+                </div>
+
+                <!-- 맨틀 Card -->
+                <div id="card-mantle" onclick="selectLayer('mantle')" class="layer-card cursor-pointer bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <h3 class="font-black text-lg text-slate-800">맨틀</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">깊이 범위</p>
+                    <p class="text-xs font-bold text-slate-700 mb-3">35 ~ 2,900 km<br><span class="text-[11px] font-normal text-slate-400">(지구 부피 80%+)</span></p>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-bold">
+                        🔥 고체(유동)
+                    </span>
+                </div>
+
+                <!-- 외핵 Card -->
+                <div id="card-outerCore" onclick="selectLayer('outerCore')" class="layer-card cursor-pointer bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                        <h3 class="font-black text-lg text-slate-800">외핵</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">깊이 범위</p>
+                    <p class="text-xs font-bold text-slate-700 mb-3">2,900 ~ 5,100 km<br><span class="text-[11px] font-normal text-slate-400">(액체 상태)</span></p>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-amber-100 text-amber-700 rounded-md text-xs font-bold">
+                        💧 액체
+                    </span>
+                </div>
+
+                <!-- 내핵 Card -->
+                <div id="card-innerCore" onclick="selectLayer('innerCore')" class="layer-card cursor-pointer bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <h3 class="font-black text-lg text-slate-800">내핵</h3>
+                    </div>
+                    <p class="text-xs text-slate-500">깊이 범위</p>
+                    <p class="text-xs font-bold text-slate-700 mb-3">5,100 ~ 6,370 km<br><span class="text-[11px] font-normal text-slate-400">(초고압 환경)</span></p>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 bg-red-100 text-red-700 rounded-md text-xs font-bold">
+                        ⚙️ 고체
+                    </span>
+                </div>
+            </div>
+
+            <!-- Dynamic Selected Detail Panel -->
+            <div id="layer-detail-box" class="bg-white p-6 rounded-3xl border-2 border-blue-500 custom-shadow transition-all">
+                <div class="flex items-center gap-2 mb-3">
+                    <span id="detail-icon" class="text-2xl">🪨</span>
+                    <h3 id="detail-title" class="text-xl font-extrabold text-blue-600">지각 (地殼, Crust)</h3>
+                </div>
+                <p id="detail-subtitle" class="text-slate-600 text-sm font-semibold mb-3">지구의 가장 바깥층으로, 우리가 살아가고 있는 고체 층이에요!</p>
+                <ul id="detail-list" class="space-y-2 text-sm text-slate-700">
+                    <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">•</span> <span><strong>대륙 지각:</strong> 두께 약 30~70 km, 화강암질 암석 (규소·알루미늄 풍부)</span></li>
+                    <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">•</span> <span><strong>해양 지각:</strong> 두께 약 5~10 km, 현무암질 암석 (규소·마그네슘 풍부)</span></li>
+                    <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">•</span> <span><strong>주요 원소 순서:</strong> 산소(O) > 규소(Si) > 알루미늄(Al) > 철(Fe) 순</span></li>
+                    <li class="flex items-start gap-2"><span class="text-blue-500 font-bold">•</span> <span><strong>특징:</strong> 고체 상태 | 지구 전체 질량의 약 1% 미만 차지</span></li>
+                </ul>
+            </div>
+
+            <!-- Summary Table Section -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow overflow-x-auto">
+                <h3 class="text-lg font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                    📊 <span>층상 구조 한눈에 비교</span>
+                </h3>
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-200 text-slate-500 font-bold">
+                            <th class="py-3 px-3">구분</th>
+                            <th class="py-3 px-3">깊이 범위</th>
+                            <th class="py-3 px-3">두께/비율</th>
+                            <th class="py-3 px-3">상태</th>
+                            <th class="py-3 px-3">주요 물질</th>
+                            <th class="py-3 px-3">특징</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        <tr class="hover:bg-blue-50/50">
+                            <td class="py-3 px-3 font-bold text-blue-600">● 지각</td>
+                            <td class="py-3 px-3">0 ~ 35 km</td>
+                            <td class="py-3 px-3">5 ~ 35 km</td>
+                            <td class="py-3 px-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded font-semibold">고체</span></td>
+                            <td class="py-3 px-3">화강암, 현무암</td>
+                            <td class="py-3 px-3">가장 얇은 층</td>
+                        </tr>
+                        <tr class="hover:bg-emerald-50/50">
+                            <td class="py-3 px-3 font-bold text-emerald-600">● 맨틀</td>
+                            <td class="py-3 px-3">35 ~ 2,900 km</td>
+                            <td class="py-3 px-3">~2,865 km (80%+)</td>
+                            <td class="py-3 px-3"><span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded font-semibold">고체(유동)</span></td>
+                            <td class="py-3 px-3">감람암질 암석</td>
+                            <td class="py-3 px-3">가장 두꺼운 층 (대류)</td>
+                        </tr>
+                        <tr class="hover:bg-amber-50/50">
+                            <td class="py-3 px-3 font-bold text-amber-600">● 외핵</td>
+                            <td class="py-3 px-3">2,900 ~ 5,100 km</td>
+                            <td class="py-3 px-3">~2,200 km</td>
+                            <td class="py-3 px-3"><span class="px-2 py-0.5 bg-amber-100 text-amber-700 rounded font-semibold">액체</span></td>
+                            <td class="py-3 px-3">철(Fe), 니켈(Ni)</td>
+                            <td class="py-3 px-3">유일한 액체 층 (자기장)</td>
+                        </tr>
+                        <tr class="hover:bg-red-50/50">
+                            <td class="py-3 px-3 font-bold text-red-600">● 내핵</td>
+                            <td class="py-3 px-3">5,100 ~ 6,370 km</td>
+                            <td class="py-3 px-3">반지름 ~1,270 km</td>
+                            <td class="py-3 px-3"><span class="px-2 py-0.5 bg-red-100 text-red-700 rounded font-semibold">고체</span></td>
+                            <td class="py-3 px-3">철(Fe), 니켈(Ni)</td>
+                            <td class="py-3 px-3">~5,000℃ 초고압 환경</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CHAPTER 2: 모형 만들기 -->
+        <section id="chapter-2" class="chapter-content space-y-6 hidden">
+            <!-- Header Banner -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">🌍</span>
+                    <h2 class="text-2xl font-black text-slate-900">지구 내부 모형 만들기</h2>
+                </div>
+                <p class="text-slate-600 text-sm">
+                    4개 영역에 알맞은 층을 선택하여 배치해보세요! <br>
+                    <strong>사용 방법:</strong> 아래에서 배치할 층 조각을 클릭한 후, 가상 지구 모형의 번호 (① ~ ④) 영역을 클릭하세요.
+                </p>
+                <div id="model-hint-msg" class="mt-3 p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-xs text-indigo-800 font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-amber-500 text-sm"></i>
+                    <span>아래의 특징 블록 4개 중 하나를 먼저 클릭하여 선택하세요!</span>
+                </div>
+            </div>
+
+            <!-- Layer Selection Pool -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div id="pool-innerCore" onclick="selectModelPiece('innerCore')" class="model-piece cursor-pointer bg-white p-3.5 rounded-2xl border-2 border-slate-200 hover:border-red-400 transition flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2 text-xs font-bold text-slate-800">
+                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                        <span>? 고체, 철·니켈, ~5000℃ 고압</span>
+                    </div>
+                    <span class="status-badge px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] font-semibold">대기중</span>
+                </div>
+
+                <div id="pool-outerCore" onclick="selectModelPiece('outerCore')" class="model-piece cursor-pointer bg-white p-3.5 rounded-2xl border-2 border-slate-200 hover:border-amber-400 transition flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2 text-xs font-bold text-slate-800">
+                        <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                        <span>? 액체, 철·니켈, 자기장 형성</span>
+                    </div>
+                    <span class="status-badge px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] font-semibold">대기중</span>
+                </div>
+
+                <div id="pool-mantle" onclick="selectModelPiece('mantle')" class="model-piece cursor-pointer bg-white p-3.5 rounded-2xl border-2 border-slate-200 hover:border-emerald-400 transition flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2 text-xs font-bold text-slate-800">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                        <span>? 고체(유동성), 감람암, 대류</span>
+                    </div>
+                    <span class="status-badge px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] font-semibold">대기중</span>
+                </div>
+
+                <div id="pool-crust" onclick="selectModelPiece('crust')" class="model-piece cursor-pointer bg-white p-3.5 rounded-2xl border-2 border-slate-200 hover:border-blue-400 transition flex items-center justify-between shadow-sm">
+                    <div class="flex items-center gap-2 text-xs font-bold text-slate-800">
+                        <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                        <span>? 고체, 화강암·현무암, 겉껍질</span>
+                    </div>
+                    <span class="status-badge px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] font-semibold">대기중</span>
+                </div>
+            </div>
+
+            <!-- Model Canvas Visualization Area -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow flex flex-col items-center justify-center relative min-h-[360px]">
+                <canvas id="modelCanvas" width="400" height="400" class="max-w-full h-auto cursor-pointer"></canvas>
+                <p class="text-xs text-slate-400 mt-2 font-medium">위 원형 영역 (① 내핵 → ④ 지각)을 클릭하여 배치하세요!</p>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button onclick="checkModelSolution()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center gap-2">
+                    <i class="fa-solid fa-check-double"></i> 완성 확인
+                </button>
+                <button onclick="resetModel()" class="px-5 py-3 bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm rounded-2xl border border-slate-200 shadow-sm transition flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> 초기화
+                </button>
+                <button onclick="showModelHint()" class="px-5 py-3 bg-white hover:bg-slate-50 text-amber-600 font-bold text-sm rounded-2xl border border-slate-200 shadow-sm transition flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb"></i> 힌트 보기
+                </button>
+            </div>
+        </section>
+
+        <!-- CHAPTER 3: 층상구조 퀴즈 -->
+        <section id="chapter-3" class="chapter-content space-y-6 hidden">
+            <!-- Header Banner -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="text-2xl">📝</span>
+                    <h2 class="text-2xl font-black text-slate-900">층상 구조 퀴즈</h2>
+                </div>
+                <p class="text-slate-600 text-sm">지권의 층상 구조에 대해 얼마나 알고 있나요? 총 6문제에 도전하고 점수를 확인해 보세요!</p>
+            </div>
+
+            <!-- Quiz Questions Container -->
+            <div id="quiz-container" class="space-y-4">
+                <!-- Question Cards populated via JavaScript -->
+            </div>
+
+            <!-- Quiz Action Buttons & Result Bar -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl">🏆</span>
+                    <div>
+                        <div class="text-xs text-slate-500 font-bold">퀴즈 응시 현황</div>
+                        <div id="quiz-status-text" class="text-sm font-extrabold text-slate-800">문제를 풀고 아래 버튼을 누르세요.</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <button onclick="submitQuiz()" class="flex-1 sm:flex-initial px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-sm rounded-2xl shadow-md shadow-indigo-100 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-trophy"></i> 최종 점수 확인
+                    </button>
+                    <button onclick="resetQuiz()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-2xl transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> 다시 풀기
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Dialog for Alerts/Results -->
+    <div id="custom-modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all text-center space-y-4">
+            <div id="modal-icon" class="text-4xl">🎉</div>
+            <h3 id="modal-title" class="text-xl font-extrabold text-slate-900">결과 안내</h3>
+            <p id="modal-desc" class="text-slate-600 text-sm leading-relaxed">내용이 여기에 들어갑니다.</p>
+            <button onclick="closeModal()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm rounded-xl transition shadow">
+                확인
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ----------------------------------------------------
+         * CHAPTER 1: LAYER DATA & INTERACTION LOGIC
+         * ---------------------------------------------------- */
+        const layerInfo = {
+            crust: {
+                title: "지각 (地殼, Crust)",
+                colorClass: "blue",
+                icon: "🪨",
+                subtitle: "지구의 가장 바깥층으로, 우리가 살아가고 있는 고체 층이에요!",
+                items: [
+                    "<strong>대륙 지각:</strong> 두께 약 30~70 km, 화강암질 암석 (Si·Al 풍부)",
+                    "<strong>해양 지각:</strong> 두께 약 5~10 km, 현무암질 암석 (Mg·Fe 풍부)",
+                    "<strong>주요 원소:</strong> 산소(O) > 규소(Si) > 알루미늄(Al) > 철(Fe) 순",
+                    "<strong>상태:</strong> 고체 | 지구 전체 질량의 약 1% 차지"
+                ]
+            },
+            mantle: {
+                title: "맨틀 (Mantle) — 가장 두꺼운 층!",
+                colorClass: "green",
+                icon: "🔥",
+                subtitle: "지각과 외핵 사이, 지구 부피의 약 80% 이상을 차지해요!",
+                items: [
+                    "<strong>두께:</strong> 약 2,865 km (깊이 35 ~ 2,900 km)",
+                    "<strong>주요 암석:</strong> 감람암 (Mg·Si 풍부)",
+                    "<strong>상태:</strong> 고체이지만 유동성이 있어 천천히 대류 운동 발생",
+                    "<strong>맨틀 대류:</strong> 판 이동과 지진·화산 활동의 원동력!",
+                    "<strong>온도:</strong> 약 1,000 ~ 3,700℃"
+                ]
+            },
+            outerCore: {
+                title: "외핵 (Outer Core) — 유일한 액체 층!",
+                colorClass: "yellow",
+                icon: "💧",
+                subtitle: "지진파 S파(횡파)가 통과하지 못해 액체 상태임을 알게 됐어요!",
+                items: [
+                    "<strong>두께:</strong> 약 2,200 km (깊이 2,900 ~ 5,100 km)",
+                    "<strong>주성분:</strong> 철(Fe)·니켈(Ni) — 액체 상태",
+                    "<strong>지구 자기장 생성:</strong> 액체 철이 대류하며 전류 발생",
+                    "<strong>온도:</strong> 약 4,000 ~ 5,000℃"
+                ]
+            },
+            innerCore: {
+                title: "내핵 (Inner Core) — 가장 뜨겁고 고압!",
+                colorClass: "red",
+                icon: "⚙️",
+                subtitle: "엄청난 초고압으로 고체 상태를 유지해요!",
+                items: [
+                    "<strong>반지름:</strong> 약 1,270 km (깊이 5,100 ~ 6,370 km)",
+                    "<strong>주성분:</strong> 철(Fe)·니켈(Ni) — 고체 상태",
+                    "<strong>온도:</strong> 약 5,000℃ 이상 (태양 표면 온도와 비슷!)",
+                    "<strong>상태:</strong> 지구 중심부의 극심한 압력으로 녹지 않고 고체 유지"
+                ]
+            }
+        };
+
+        function selectLayer(key) {
+            const data = layerInfo[key];
+            const detailBox = document.getElementById('layer-detail-box');
+            
+            // Reset active card styles
+            document.querySelectorAll('.layer-card').forEach(card => {
+                card.className = "layer-card cursor-pointer bg-white p-4 rounded-2xl border-2 border-slate-200 shadow-sm hover:shadow-md transition";
+            });
+
+            // Highlight selected card
+            const selectedCard = document.getElementById(`card-${key}`);
+            const borderColors = { crust: 'blue', mantle: 'green', outerCore: 'yellow', innerCore: 'red' };
+            const activeColor = borderColors[key];
+            selectedCard.classList.add(`active-${activeColor}`);
+
+            // Update Detail Box Border and Content
+            const borderClassMap = {
+                crust: 'border-blue-500',
+                mantle: 'border-emerald-500',
+                outerCore: 'border-amber-500',
+                innerCore: 'border-red-500'
+            };
+            const textClassMap = {
+                crust: 'text-blue-600',
+                mantle: 'text-emerald-600',
+                outerCore: 'text-amber-600',
+                innerCore: 'text-red-600'
+            };
+            const bulletClassMap = {
+                crust: 'text-blue-500',
+                mantle: 'text-emerald-500',
+                outerCore: 'text-amber-500',
+                innerCore: 'text-red-500'
+            };
+
+            detailBox.className = `bg-white p-6 rounded-3xl border-2 ${borderClassMap[key]} custom-shadow transition-all`;
+            document.getElementById('detail-icon').innerText = data.icon;
+            
+            const titleEl = document.getElementById('detail-title');
+            titleEl.className = `text-xl font-extrabold ${textClassMap[key]}`;
+            titleEl.innerText = data.title;
+
+            document.getElementById('detail-subtitle').innerText = data.subtitle;
+
+            const listEl = document.getElementById('detail-list');
+            listEl.innerHTML = data.items.map(item => `
+                <li class="flex items-start gap-2">
+                    <span class="${bulletClassMap[key]} font-bold">•</span>
+                    <span>${item}</span>
+                </li>
+            `).join('');
+        }
+
+        /* ----------------------------------------------------
+         * CHAPTER 2: MODEL BUILDING CANVAS & DRAG/DROP LOGIC
+         * ---------------------------------------------------- */
+        let selectedPiece = null; // Currently selected piece type
+        const modelSlots = {
+            1: null, // Inner core (center)
+            2: null, // Outer core
+            3: null, // Mantle
+            4: null  // Crust (outermost)
+        };
+
+        const pieceColors = {
+            innerCore: '#ef4444',
+            outerCore: '#facc15',
+            mantle: '#22c55e',
+            crust: '#3b82f6'
+        };
+
+        const pieceNames = {
+            innerCore: '내핵',
+            outerCore: '외핵',
+            mantle: '맨틀',
+            crust: '지각'
+        };
+
+        function initModelCanvas() {
+            const canvas = document.getElementById('modelCanvas');
+            const ctx = canvas.getContext('2d');
+            drawModelCanvas(ctx);
+
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX - rect.left) * (canvas.width / rect.width) - canvas.width / 2;
+                const y = (e.clientY - rect.top) * (canvas.height / rect.height) - canvas.height / 2;
+                const dist = Math.sqrt(x * x + y * y);
+
+                // Radii ranges for slots
+                let slotClicked = null;
+                if (dist <= 40) slotClicked = 1; // 내핵
+                else if (dist <= 85) slotClicked = 2; // 외핵
+                else if (dist <= 140) slotClicked = 3; // 맨틀
+                else if (dist <= 175) slotClicked = 4; // 지각
+
+                if (slotClicked) {
+                    if (!selectedPiece) {
+                        showModal('안내', '상단에서 클릭하여 배치할 층을 먼저 선택해주세요!', '💡');
+                        return;
+                    }
+                    modelSlots[slotClicked] = selectedPiece;
+                    updatePieceStatus(selectedPiece, slotClicked);
+                    selectedPiece = null;
+                    deselectPieceUI();
+                    drawModelCanvas(ctx);
+                }
+            });
+        }
+
+        function selectModelPiece(key) {
+            selectedPiece = key;
+            document.querySelectorAll('.model-piece').forEach(el => {
+                el.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50/50');
+            });
+            const targetEl = document.getElementById(`pool-${key}`);
+            targetEl.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-50/50');
+
+            document.getElementById('model-hint-msg').innerHTML = `
+                <i class="fa-solid fa-circle-info text-indigo-600 text-sm"></i>
+                <span>선택됨: <strong>[${pieceNames[key]}]</strong> → 지구 단면 원형판의 배치할 영역(①~④)을 클릭하세요!</span>
+            `;
+        }
+
+        function deselectPieceUI() {
+            document.querySelectorAll('.model-piece').forEach(el => {
+                el.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50/50');
+            });
+            document.getElementById('model-hint-msg').innerHTML = `
+                <i class="fa-solid fa-lightbulb text-amber-500 text-sm"></i>
+                <span>아래의 특징 블록 4개 중 하나를 먼저 클릭하여 선택하세요!</span>
+            `;
+        }
+
+        function updatePieceStatus(key, slotNum) {
+            const badge = document.getElementById(`pool-${key}`).querySelector('.status-badge');
+            badge.innerText = `영역 ①~④ 중 배치됨`;
+            badge.className = "status-badge px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[11px] font-bold";
+        }
+
+        function drawModelCanvas(ctx) {
+            const w = ctx.canvas.width;
+            const h = ctx.canvas.height;
+            const cx = w / 2;
+            const cy = h / 2;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const radii = [
+                { slot: 4, r: 170, defaultColor: '#e2e8f0', name: '④' },
+                { slot: 3, r: 135, defaultColor: '#cbd5e1', name: '③' },
+                { slot: 2, r: 80, defaultColor: '#94a3b8', name: '②' },
+                { slot: 1, r: 40, defaultColor: '#64748b', name: '①' }
+            ];
+
+            // Draw concentric circles
+            radii.forEach(item => {
+                ctx.beginPath();
+                ctx.arc(cx, cy, item.r, 0, Math.PI * 2);
+                const assigned = modelSlots[item.slot];
+                ctx.fillStyle = assigned ? pieceColors[assigned] : item.defaultColor;
+                ctx.fill();
+                ctx.lineWidth = 1.5;
+                ctx.strokeStyle = '#ffffff';
+                ctx.stroke();
+            });
+
+            // Draw Slot Labels
+            radii.forEach(item => {
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 13px Pretendard, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                const assigned = modelSlots[item.slot];
+                const labelText = assigned ? `${item.name} ${pieceNames[assigned]}` : `${item.name}`;
+
+                // Offset labels for visibility
+                const yOffset = item.r === 40 ? 0 : -item.r + 18;
+                ctx.fillText(labelText, cx, cy + yOffset);
+            });
+
+            // Center Earth Radius Marker Line
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + 170, cy);
+            ctx.setLineDash([3, 3]);
+            ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#475569';
+            ctx.font = '11px Pretendard, sans-serif';
+            ctx.fillText('6,370 km', cx + 85, cy + 12);
+        }
+
+        function checkModelSolution() {
+            const correctSolution = { 1: 'innerCore', 2: 'outerCore', 3: 'mantle', 4: 'crust' };
+            let isCorrect = true;
+            let filledCount = 0;
+
+            for (let i = 1; i <= 4; i++) {
+                if (modelSlots[i]) filledCount++;
+                if (modelSlots[i] !== correctSolution[i]) {
+                    isCorrect = false;
+                }
+            }
+
+            if (filledCount < 4) {
+                showModal('미완성', '아직 모든 영역이 채워지지 않았습니다. 4개 영역을 모두 채워주세요!', '⚠️');
+                return;
+            }
+
+            if (isCorrect) {
+                showModal('축하합니다! 🎉', '지구 내부 층상 구조 모형을 완벽하게 완성했습니다!', '🏆');
+            } else {
+                showModal('다시 도전해보세요!', '일부 영역의 위치가 맞지 않습니다. 층상 구조 깊이와 순서를 확인해보세요!', '❌');
+            }
+        }
+
+        function resetModel() {
+            for (let i = 1; i <= 4; i++) modelSlots[i] = null;
+            selectedPiece = null;
+            deselectPieceUI();
+
+            document.querySelectorAll('.status-badge').forEach(badge => {
+                badge.innerText = '대기중';
+                badge.className = "status-badge px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[11px] font-semibold";
+            });
+
+            const canvas = document.getElementById('modelCanvas');
+            drawModelCanvas(canvas.getContext('2d'));
+        }
+
+        function showModelHint() {
+            showModal('층상 구조 힌트', '중심에서부터 바깥쪽 순서:\n① 가장 중심: 내핵 (고체)\n② 중심 외곽: 외핵 (액체)\n③ 가장 두꺼운 중간층: 맨틀 (고체)\n④ 가장 바깥 겉껍질: 지각 (고체)', '💡');
+        }
+
+        /* ----------------------------------------------------
+         * CHAPTER 3: QUIZ SYSTEM LOGIC
+         * ---------------------------------------------------- */
+        const quizData = [
+            {
+                id: 1,
+                q: "지권의 층상 구조 중 가장 두꺼운 층은?",
+                options: ["지각", "맨틀", "외핵", "내핵"],
+                ans: 1
+            },
+            {
+                id: 2,
+                q: "지권의 층상 구조 중 가장 얇은 층은?",
+                options: ["맨틀", "외핵", "내핵", "지각"],
+                ans: 3
+            },
+            {
+                id: 3,
+                q: "4개 층 중 물질의 상태가 다른 유일한 액체 층은?",
+                options: ["지각 (고체)", "맨틀 (고체·유동)", "외핵 (액체)", "내핵 (고체)"],
+                ans: 2
+            },
+            {
+                id: 4,
+                q: "S파(횡파)가 외핵을 통과하지 못하는 주된 이유는?",
+                options: [
+                    "외핵이 너무 뜨겁기 때문",
+                    "외핵이 액체 상태이기 때문",
+                    "외핵의 압력이 너무 높기 때문",
+                    "외핵이 철·니켈 성분이기 때문"
+                ],
+                ans: 1
+            },
+            {
+                id: 5,
+                q: "지구 내부 가장 깊은 곳까지 직접/간접적으로 탐구할 수 있는 가장 효과적인 방법은?",
+                options: ["시추법", "화산 분출물 분석", "지진파(P파·S파) 분석", "운석 분석"],
+                ans: 2
+            },
+            {
+                id: 6,
+                q: "지권의 층상 구조를 구분하는 가장 직접적인 기준은 무엇일까요?",
+                options: [
+                    "깊이에 따른 지진파 전파 속도의 급격한 변화",
+                    "지표면에서 관측되는 지각의 온도 차이",
+                    "지구 내부 암석의 색상 변화",
+                    "해수면과의 높이 차이"
+                ],
+                ans: 0
+            }
+        ];
+
+        const userAnswers = {};
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = quizData.map((q, idx) => `
+                <div class="bg-white p-6 rounded-3xl border border-slate-200/80 custom-shadow space-y-3">
+                    <div class="flex items-center gap-2">
+                        <span class="w-7 h-7 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">Q${idx + 1}</span>
+                        <h3 class="font-extrabold text-base text-slate-900">${q.q}</h3>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        ${q.options.map((opt, oIdx) => `
+                            <button onclick="selectAnswer(${q.id}, ${oIdx})" id="q${q.id}-opt${oIdx}" class="quiz-opt-btn p-3.5 rounded-2xl border-2 border-slate-100 bg-slate-50 hover:bg-slate-100/80 text-left text-xs sm:text-sm font-semibold text-slate-700 transition flex items-center justify-between">
+                                <span>${opt}</span>
+                                <i class="fa-regular fa-circle text-slate-300"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectAnswer(qId, optionIdx) {
+            userAnswers[qId] = optionIdx;
+
+            // Reset buttons styling for this question
+            const qObj = quizData.find(q => q.id === qId);
+            qObj.options.forEach((_, idx) => {
+                const btn = document.getElementById(`q${qId}-opt${idx}`);
+                btn.className = "quiz-opt-btn p-3.5 rounded-2xl border-2 border-slate-100 bg-slate-50 hover:bg-slate-100/80 text-left text-xs sm:text-sm font-semibold text-slate-700 transition flex items-center justify-between";
+                btn.querySelector('i').className = "fa-regular fa-circle text-slate-300";
+            });
+
+            // Highlight selected button
+            const selectedBtn = document.getElementById(`q${qId}-opt${optionIdx}`);
+            selectedBtn.className = "quiz-opt-btn p-3.5 rounded-2xl border-2 border-indigo-600 bg-indigo-50/50 text-left text-xs sm:text-sm font-extrabold text-indigo-900 transition flex items-center justify-between";
+            selectedBtn.querySelector('i').className = "fa-solid fa-circle-check text-indigo-600";
+
+            // Update status text
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('quiz-status-text').innerText = `${quizData.length}문제 중 ${answeredCount}문제 답변 완료`;
+        }
+
+        function submitQuiz() {
+            const answeredCount = Object.keys(userAnswers).length;
+
+            if (answeredCount < quizData.length) {
+                showModal('알림', `총 ${quizData.length}문제 중 ${answeredCount}문제만 풀었습니다. 모든 문제를 답해주세요!`, '✏️');
+                return;
+            }
+
+            let score = 0;
+            const wrongQuestions = [];
+
+            quizData.forEach((q, idx) => {
+                if (userAnswers[q.id] === q.ans) {
+                    score += 1;
+                } else {
+                    wrongQuestions.push(idx + 1);
+                }
+            });
+
+            const finalScore = Math.round((score / quizData.length) * 100);
+            
+            let resultMessage = `수고하셨습니다!\n총 ${quizData.length}문제 중 ${score}문제를 맞추셨습니다. (최종 점수: ${finalScore}점)\n`;
+
+            if (wrongQuestions.length > 0) {
+                resultMessage += `\n❌ 틀린 문제: Q${wrongQuestions.join(', Q')}번`;
+            } else {
+                resultMessage += `\n🎉 모든 문제를 맞히셨습니다! 완벽해요!`;
+            }
+
+            showModal('최종 퀴즈 결과', resultMessage, score === quizData.length ? '🎉' : '📖');
+        }
+
+        function resetQuiz() {
+            for (let key in userAnswers) delete userAnswers[key];
+            renderQuiz();
+            document.getElementById('quiz-status-text').innerText = "문제를 풀고 아래 버튼을 누르세요.";
+        }
+
+        /* ----------------------------------------------------
+         * COMMON SYSTEM NAVIGATION & MODAL HELPERS
+         * ---------------------------------------------------- */
+        function switchChapter(num) {
+            // Hide all chapters
+            document.querySelectorAll('.chapter-content').forEach(c => c.classList.add('hidden'));
+            
+            // Remove active classes on buttons
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            // Show selected chapter and highlight tab
+            document.getElementById(`chapter-${num}`).classList.remove('hidden');
+            document.getElementById(`btn-chap${num}`).classList.add('active');
+
+            if (num === 2) {
+                // Resize canvas view if needed
+                const canvas = document.getElementById('modelCanvas');
+                drawModelCanvas(canvas.getContext('2d'));
+            }
+        }
+
+        function showModal(title, message, icon = 'ℹ️') {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-desc').innerText = message;
+            document.getElementById('modal-icon').innerText = icon;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        window.onload = function() {
+            selectLayer('crust');
+            initModelCanvas();
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>
